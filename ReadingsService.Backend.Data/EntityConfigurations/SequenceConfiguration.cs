@@ -4,7 +4,7 @@ using ReadingsService.Backend.Core.Entities;
 
 namespace ReadingsService.Backend.Data.EntityConfigurations;
 
-internal class SequenceConfiguration : IEntityTypeConfiguration<SequenceEntity>
+internal class SequenceConfiguration : IEntityTypeConfiguration<Sequence>
 {
-    public void Configure(EntityTypeBuilder<SequenceEntity> builder) => builder.HasMany(s => s.Observations).WithOne(o => o.Sequence).OnDelete(DeleteBehavior.Cascade);
+    public void Configure(EntityTypeBuilder<Sequence> builder) => builder.HasMany(s => s.Observations).WithOne(o => o.Sequence).OnDelete(DeleteBehavior.Cascade);
 }

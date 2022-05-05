@@ -4,9 +4,9 @@ using ReadingsService.Backend.Core.Entities;
 
 namespace ReadingsService.Backend.Data.EntityConfigurations;
 
-internal class ObservationConfiguration : IEntityTypeConfiguration<ObservationEntity>
+internal class ObservationConfiguration : IEntityTypeConfiguration<Observation>
 {
-    public void Configure(EntityTypeBuilder<ObservationEntity> builder)
+    public void Configure(EntityTypeBuilder<Observation> builder)
     {
         // NOP
     }

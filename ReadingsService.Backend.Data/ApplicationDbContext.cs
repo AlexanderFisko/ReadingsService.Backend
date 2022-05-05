@@ -8,9 +8,9 @@ public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
 
-    public DbSet<ObservationEntity> Observations { get; set; } = null!;
+    public DbSet<Observation> Observations { get; set; } = null!;
 
-    public DbSet<SequenceEntity> Sequences { get; set; } = null!;
+    public DbSet<Sequence> Sequences { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

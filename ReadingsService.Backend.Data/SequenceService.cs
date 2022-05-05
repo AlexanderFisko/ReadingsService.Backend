@@ -17,7 +17,7 @@ public class SequenceService : ISequenceService
 
     public async Task<Guid> CreateAsync(CancellationToken cancellationToken)
     {
-        var sequence = new SequenceEntity();
+        var sequence = new Sequence();
         _dbContext.Sequences.Add(sequence);
 
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -30,7 +30,7 @@ public class SequenceService : ISequenceService
         if (!idsList.Any())
             return;
 
-        foreach (var sequence in idsList.Select(id => new SequenceEntity { Id = id }))
+        foreach (var sequence in idsList.Select(id => new Sequence { Id = id }))
         {
             _dbContext.Sequences.Attach(sequence);
             _dbContext.Sequences.Remove(sequence);
@@ -39,20 +39,20 @@ public class SequenceService : ISequenceService
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<SequenceEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => await _dbContext.Sequences.Include(x => x.Observations)
+    public async Task<Sequence?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => await _dbContext.Sequences.Include(x => x.Observations)
         .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-    public async Task AddObservationByIdAsync(Guid id, Color color, byte displayLow, byte displayHigh, CancellationToken cancellationToken)
+    public async Task AddObservationByIdAsync(Guid id, Color color, byte? displayFirst, byte? displaySecond, CancellationToken cancellationToken)
     {
         if (!await _dbContext.Sequences.AnyAsync(x => x.Id == id, cancellationToken))
-            throw new Exception($"{nameof(SequenceEntity)} with {nameof(SequenceEntity.Id)} = \"{id}\" does not exists");
+            throw new Exception($"{nameof(Sequence)} with {nameof(Sequence.Id)} = \"{id}\" does not exists");
 
-        var observation = new ObservationEntity
+        var observation = new Observation
         {
             SequenceId = id,
             Color = color,
-            DisplayLow = displayLow,
-            DisplayHigh = displayHigh
+            FirstDisplay = displayFirst,
+            SecondDisplay = displaySecond
         };
 
         _dbContext.Observations.Add(observation);

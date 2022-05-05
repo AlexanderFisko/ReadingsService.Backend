@@ -12,7 +12,7 @@ public interface ISequenceService
 
     Task ClearAsync(CancellationToken cancellationToken);
 
-    Task<SequenceEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Sequence?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    Task AddObservationByIdAsync(Guid id, Color color, byte displayLow, byte displayHigh, CancellationToken cancellationToken);
+    Task AddObservationByIdAsync(Guid id, Color color, byte? displayFirst, byte? displaySecond, CancellationToken cancellationToken);
 }

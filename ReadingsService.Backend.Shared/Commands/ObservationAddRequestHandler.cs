@@ -3,6 +3,8 @@ using ReadingsService.Backend.Core;
 using ReadingsService.Backend.Shared.Models.Responses;
 using ReadingsService.Backend.Shared.Models.Responses.Base;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,41 +46,41 @@ internal class ObservationAddRequestHandler : IRequestHandler<ObservationAddRequ
                 Msg = "“The red observation should be the last"
             };
 
+        var isLast = data.Observation.Color == Color.Red;
 
-        var numbers = data.Observation.Numbers.ToArray();
-        if (numbers.Length != 2)
+        var numbers = data.Observation.Numbers?.ToArray();
+        if (!isLast && numbers?.Length != 2)
             throw new Exception("Only two numbers allowed");
 
-        var lowNumber = GetFromString(numbers[1]);
-        var highNumber = GetFromString(numbers[0]);
+        var values = sequence.Observations?.OrderBy(x => x.Id)
+                         .Select(x => (First: new BitArray(new[] { x.FirstDisplay!.Value }), Second: new BitArray(new[] { x.SecondDisplay!.Value })))
+                         .ToList()
+                     ?? new List<(BitArray First, BitArray Second)>();
 
-        // TODO: реализовать логику анализа последовательности :)
+        if (!isLast)
+            values.Add((SevenSegmentDisplay.GetFromString(numbers![1]), SevenSegmentDisplay.GetFromString(numbers[0])));
+
+        // var startValue = values.First();
+        // var start = new List<byte>();
+        // foreach (var x in SevenSegmentDisplay.GetPossibleValuesByPattern(startValue.First))
+        // foreach (var y in SevenSegmentDisplay.GetPossibleValuesByPattern(startValue.Second))
+        //     start.Add((byte)(10 * x + y));
+
+        // var missing = new List<BitArray>();
+
+        foreach (var item in values)
+        {
+            // TODO: реализовать логику анализа последовательности :)
+        }
+
+
+        // TODO: write
         await _sequenceService.AddObservationByIdAsync(id, color, 0, 0, cancellationToken);
 
         return new ResponseDto<ObservationAddResponseDto>
         {
+            // TODO: result
             Response = new ObservationAddResponseDto(Array.Empty<byte>(), Array.Empty<string>())
         };
-    }
-
-    private static bool[] GetFromString(string value)
-    {
-        const int patternLength = 7;
-
-        if (value.Length != patternLength)
-            throw new ArgumentException("Invalid value", nameof(value));
-
-        var result = new bool[patternLength];
-
-        for (var i = 0; i < patternLength; i++)
-        {
-            var chr = value[i];
-            if (chr != '0' && chr != '1')
-                throw new ArgumentException("Invalid value", nameof(value));
-
-            result[i] = chr == '1';
-        }
-
-        return result;
     }
 }

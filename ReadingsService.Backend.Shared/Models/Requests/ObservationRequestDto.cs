@@ -7,5 +7,5 @@ public class ObservationRequestDto
 {
     public Color Color { get; set; }
 
-    public IEnumerable<string> Numbers { get; set; } = null!;
+    public IEnumerable<string>? Numbers { get; set; }
 }

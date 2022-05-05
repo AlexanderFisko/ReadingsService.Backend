@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace ReadingsService.Backend.Core.Entities;
 
-public class SequenceEntity
+public class Sequence
 {
     public Guid Id { get; set; }
 
-    public ICollection<ObservationEntity>? Observations { get; set; }
+    public ICollection<Observation>? Observations { get; set; }
 }
